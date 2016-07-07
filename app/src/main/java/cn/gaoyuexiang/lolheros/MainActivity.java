@@ -1,8 +1,12 @@
 package cn.gaoyuexiang.lolheros;
 
+import android.graphics.Bitmap;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -13,14 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.gaoyuexiang.lolheros.adapter.HeroListAdapter;
+import cn.gaoyuexiang.lolheros.adapter.HeroPagerAdapter;
 import cn.gaoyuexiang.lolheros.modle.Hero;
 import cn.gaoyuexiang.lolheros.modle.HttpResult;
 import cn.gaoyuexiang.lolheros.service.DataTask;
+import cn.gaoyuexiang.lolheros.service.ImgTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView listView;
     private HttpResult httpData = new HttpResult();
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.lv);
         downloadData();
+
     }
 
     private void downloadData() {
@@ -53,7 +60,25 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                HeroListAdapter adapter = new HeroListAdapter(MainActivity.this, httpData.getHeros());
+
+                final ArrayList<String> topHeros = new ArrayList<>(3);
+                List<Hero> heros = httpData.getHeros();
+
+                ViewPager viewPager = new ViewPager(MainActivity.this);
+                viewPager.setLayoutParams(
+                        new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 400));
+                final ImageView pageIv = new ImageView(MainActivity.this);
+                viewPager.addView(pageIv);
+                for (int i = 0; i < 3; i++) {
+                    topHeros.add(heros.get(i).getImg());
+                }
+
+                HeroPagerAdapter heroPagerAdapter = new HeroPagerAdapter(topHeros, MainActivity.this);
+                viewPager.setAdapter(heroPagerAdapter);
+                listView.addHeaderView(viewPager);
+
+                HeroListAdapter adapter = new HeroListAdapter(MainActivity.this, heros);
+                assert listView != null;
                 listView.setAdapter(adapter);
             }
         }).execute(Conf.API);

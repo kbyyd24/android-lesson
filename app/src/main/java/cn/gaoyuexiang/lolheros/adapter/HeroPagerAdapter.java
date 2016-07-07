@@ -9,22 +9,24 @@ import android.widget.ImageView;
 
 import java.util.List;
 
+import cn.gaoyuexiang.lolheros.service.ImgTask;
+
 /**
  * Created by kbyyd on 2016/7/7.
  */
 public class HeroPagerAdapter extends PagerAdapter {
 
-    private List<Bitmap> bitmaps;
+    private List<String> heros;
     private Context context;
 
-    public HeroPagerAdapter(List<Bitmap> bitmaps, Context context) {
-        this.bitmaps = bitmaps;
+    public HeroPagerAdapter(List<String> heros, Context context) {
+        this.heros = heros;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return bitmaps.size();
+        return heros.size();
     }
 
     @Override
@@ -34,8 +36,13 @@ public class HeroPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        ImageView iv = new ImageView(context);
-        iv.setImageBitmap(bitmaps.get(position));
+        final ImageView iv = new ImageView(context);
+        new ImgTask(new ImgTask.Callback() {
+            @Override
+            public void callback(Bitmap result) {
+                iv.setImageBitmap(result);
+            }
+        }).execute(heros.get(position));
         container.addView(iv);
         return iv;
     }

@@ -11,10 +11,10 @@ import cn.gaoyuexiang.lolheros.util.HttpUtil;
  */
 public class ImgTask extends AsyncTask<String, Void, Bitmap> {
 
-    private ImageView picture;
+    private Callback callback;
 
-    public ImgTask(ImageView picture) {
-        this.picture = picture;
+    public ImgTask(Callback callback) {
+        this.callback = callback;
     }
 
     @Override
@@ -24,6 +24,10 @@ public class ImgTask extends AsyncTask<String, Void, Bitmap> {
 
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        picture.setImageBitmap(bitmap);
+        callback.callback(bitmap);
+    }
+
+    public static interface Callback {
+        void callback(Bitmap result);
     }
 }
