@@ -1,5 +1,8 @@
 package cn.gaoyuexiang.lolheros.util;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +33,21 @@ public class HttpUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return result;
+    }
+
+    public static Bitmap downloadImg(String addrUrl) {
+        Bitmap result = null;
+
+        try {
+            URL url = new URL(addrUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            result = conn.getResponseCode() == 200 ?
+                    BitmapFactory.decodeStream(conn.getInputStream()) : null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 }
