@@ -1,6 +1,7 @@
 package cn.gaoyuexiang.lolheros;
 
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private HttpResult httpData = new HttpResult();
     private ListView listView;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.lv);
         downloadData();
-
     }
 
     private void downloadData() {
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 final ArrayList<String> topHeros = new ArrayList<>(3);
                 List<Hero> heros = httpData.getHeros();
 
-                ViewPager viewPager = new ViewPager(MainActivity.this);
+                viewPager = new ViewPager(MainActivity.this);
                 viewPager.setLayoutParams(
                         new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 400));
                 final ImageView pageIv = new ImageView(MainActivity.this);
@@ -82,5 +83,22 @@ public class MainActivity extends AppCompatActivity {
                 listView.setAdapter(adapter);
             }
         }).execute(Conf.API);
+    }
+
+    private Handler handler = new Handler(){
+        public void handleMessage(android.os.Message msg) {
+            if (msg.what == 1 &&  viewPager != null) {
+                int currentItem = viewPager.getCurrentItem();
+                int nextItem = currentItem+1;
+                viewPager.setCurrentItem(nextItem%3);
+            }
+                handler.sendEmptyMessageDelayed(1, 4000);
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handler.sendEmptyMessageDelayed(1, 4000);
     }
 }
