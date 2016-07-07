@@ -11,9 +11,9 @@ public class Hero {
     private String nameC;
     private String title;
     private String img;
-    private List<String> tags;
+    private String tags;
 
-    public Hero(int id, String nameC, String title, String img, List<String> tags) {
+    public Hero(int id, String nameC, String title, String img, String tags) {
         this.id = id;
         this.nameC = nameC;
         this.title = title;
@@ -53,11 +53,11 @@ public class Hero {
         this.img = img;
     }
 
-    public List<String> getTags() {
+    public String getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
+    public void setTags(String tags) {
         this.tags = tags;
     }
 }
