@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.gaoyuexiang.lolheros.adapter.HeroListAdapter;
 import cn.gaoyuexiang.lolheros.modle.Hero;
 import cn.gaoyuexiang.lolheros.modle.HttpResult;
 import cn.gaoyuexiang.lolheros.service.DataTask;
@@ -20,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listView;
     private HttpResult httpData = new HttpResult();
-    private final String url = "http://lol.data.shiwan.com/lolHeros/?filter=&type=free";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                HeroListAdapter adapter = new HeroListAdapter(MainActivity.this, httpData.getHeros());
+                listView.setAdapter(adapter);
             }
-        }).execute(url);
+        }).execute(Conf.API);
     }
 }
