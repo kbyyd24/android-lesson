@@ -21,6 +21,10 @@ public class Hero {
         this.tags = tags;
     }
 
+    public Hero() {
+        
+    }
+
     public int getId() {
         return id;
     }
