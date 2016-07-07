@@ -1,6 +1,7 @@
 package cn.gaoyuexiang.lolheros.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,9 +45,9 @@ return heros.size();
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = convertView == null ?
-                LayoutInflater.from(context).inflate(R.layout.item_01, parent, false) : convertView;
-        ImageView picture = (ImageView) convertView.findViewById(R.id.iv);
+        if (convertView == null)
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_01, parent, false);
+        final ImageView picture = (ImageView) convertView.findViewById(R.id.iv);
         TextView name = (TextView) convertView.findViewById(R.id.tv_name);
         TextView tags = (TextView) convertView.findViewById(R.id.tv_tag);
 
@@ -56,7 +57,12 @@ return heros.size();
         tags.setText(hero.getTags());
 
         if (hero.getImg().length() > 0)
-            new ImgTask(picture).execute(hero.getImg());
+            new ImgTask(new ImgTask.Callback() {
+                @Override
+                public void callback(Bitmap result) {
+                    picture.setImageBitmap(result);
+                }
+            }).execute(hero.getImg());
 
         return convertView;
     }
