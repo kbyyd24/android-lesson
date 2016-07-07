@@ -10,6 +10,9 @@ public class HttpResult {
     private int errorCode;
     private List<Hero> heros;
 
+    public HttpResult() {
+    }
+
     public HttpResult(int errorCode, List<Hero> heros) {
         this.errorCode = errorCode;
         this.heros = heros;
